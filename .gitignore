@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+__pycache__
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables — NEVER commit your API key
+.env
+
+# Logs (runtime generated)
+logs/*.jsonl
+
+# Generated sample images (runtime generated)
+assets/sample_images/demo/
+assets/sample_images/batch/
+frames/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# CLIP model cache (managed by PyTorch, no need to commit)
+~/.cache/clip/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documents 
+*.docx
+*.pdf

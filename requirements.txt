@@ -1,0 +1,49 @@
+# ============================================================================
+# Plant Growth Monitor — Python Dependencies
+# ============================================================================
+#
+# INSTALLATION
+# ------------
+# Minimal install (Layer 1 only — no model downloads):
+#   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
+#
+# Full install including Layer 2 (CLIP):
+#   pip install -r requirements.txt
+#   pip install git+https://github.com/openai/CLIP.git
+#
+# See README.md → Installation for hardware-specific PyTorch variants.
+# ============================================================================
+
+# ── Core Computer Vision ─────────────────────────────────────────────────────
+# OpenCV: classical CV operations (HSV masking, GrabCut, morphology, video I/O)
+opencv-python>=4.8.0
+
+# NumPy: array operations, pixel arithmetic
+numpy>=1.24.0
+
+# Pillow: image loading and format normalisation (required by CLIP)
+Pillow>=10.0.0
+
+# ── Deep Learning (Layer 2 — CLIP) ───────────────────────────────────────────
+# PyTorch: CLIP inference backend
+# For CPU-only: pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cpu
+# For CUDA 12.x: pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu121
+torch>=2.1.0
+torchvision>=0.16.0
+
+# CLIP — installed separately via git (see above)
+# git+https://github.com/openai/CLIP.git
+
+# ── Gemini API (Layer 3 fallback) ────────────────────────────────────────────
+google-generativeai>=0.4.0
+
+# ── Visualisation ────────────────────────────────────────────────────────────
+matplotlib>=3.7.0
+
+# ── Development & Testing ────────────────────────────────────────────────────
+#pytest>=7.4.0
+#pytest-cov>=4.1.0      # Coverage reporting
+
+# ── Notebooks ────────────────────────────────────────────────────────────────
+jupyter>=1.0.0
+ipykernel>=6.0.0
