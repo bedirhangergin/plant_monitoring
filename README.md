@@ -79,7 +79,7 @@ Input Image (photo or extracted video frame)
 ## Project Structure
 
 ```
-plant_monitoring_project/
+plant_monitoring/
 │
 ├── config.py                        # Central configuration (all tunable parameters)
 ├── main.py                          # CLI entry point
@@ -105,14 +105,8 @@ plant_monitoring_project/
 │       └── image_gen.py             # Synthetic test image generator
 │
 ├── tests/
-│   ├── conftest.py                  # Shared pytest fixtures (images, configs)
 │   ├── unit/
-│   │   ├── test_result.py           # SproutResult dataclass tests
-│   │   ├── test_hsv_detector.py     # Layer 1 tests (full — no mocking needed)
-│   │   ├── test_clip_detector.py    # Layer 2 tests (mocked CLIP model)
-│   │   └── test_gemini_detector.py  # Layer 3 tests (mocked Gemini API)
 │   └── integration/
-│       └── test_cascade.py          # Full pipeline tests with stub detectors
 │
 ├── notebooks/
 │   └── 01_sprout_detection_demo.ipynb   # Guided demonstration notebook
