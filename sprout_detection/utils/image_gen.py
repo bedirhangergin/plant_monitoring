@@ -289,4 +289,4 @@ def make_batch(
 def _save(img: np.ndarray, path: str) -> None:
     """Create parent directories and save image as JPEG."""
     os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)
-    cv2.imwrite(path, img, [cv2.IMWRITE_JPEG_QUALITY, 95])
+    cv2.imwrite(path, img)

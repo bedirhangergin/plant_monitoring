@@ -234,21 +234,20 @@ class SAM2Segmentor(BaseCapability):
         with self._timer() as t:
             inputs = self._processor(
                 images=image,
-                input_boxes=[[[list(box)]]],  # SAM2 expects nested list
+                input_boxes=[[list(box)]],  # SAM2 expects nested list
                 return_tensors="pt",
             ).to(self._device)
 
             with torch.no_grad():
                 outputs = self._model(**inputs)
 
-            masks, scores, _ = self._processor.post_process_masks(
-                outputs.pred_masks.cpu(),
-                inputs["original_sizes"].cpu(),
-                inputs["reshaped_input_sizes"].cpu(),
-            )
+            masks = self._processor.post_process_masks(
+                        outputs.pred_masks.cpu(),
+                        inputs["original_sizes"].cpu(),
+                    )
 
         # Take the highest-score mask
-        mask = self._best_mask(masks[0], scores[0])
+        mask = self._best_mask(masks[0])
         return self._build_result(
             image_path, mask, img_w, img_h, t.elapsed_ms, "box", box
         )
@@ -295,13 +294,12 @@ class SAM2Segmentor(BaseCapability):
             with torch.no_grad():
                 outputs = self._model(**inputs)
 
-            masks, scores, _ = self._processor.post_process_masks(
-                outputs.pred_masks.cpu(),
-                inputs["original_sizes"].cpu(),
-                inputs["reshaped_input_sizes"].cpu(),
+            masks = self._processor.post_process_masks(
+                        outputs.pred_masks.cpu(),
+                        inputs["original_sizes"].cpu(),
             )
 
-        mask = self._best_mask(masks[0], scores[0])
+        mask = self._best_mask(masks[0])
         return self._build_result(
             image_path, mask, img_w, img_h, t.elapsed_ms, "point", point
         )
@@ -338,11 +336,10 @@ class SAM2Segmentor(BaseCapability):
             with torch.no_grad():
                 outputs = self._model(**inputs)
 
-            masks, scores, _ = self._processor.post_process_masks(
-                outputs.pred_masks.cpu(),
-                inputs["original_sizes"].cpu(),
-                inputs["reshaped_input_sizes"].cpu(),
-            )
+            masks = self._processor.post_process_masks(
+                        outputs.pred_masks.cpu(),
+                        inputs["original_sizes"].cpu(),
+                    )
 
         # Flatten all masks into a list, sorted by area descending
         all_masks = []
@@ -364,16 +361,25 @@ class SAM2Segmentor(BaseCapability):
     # ------------------------------------------------------------------ #
 
     @staticmethod
-    def _best_mask(masks_tensor, scores_tensor) -> Optional[np.ndarray]:
-        """Select the mask with the highest score from a batch."""
-        import torch
-        if masks_tensor.numel() == 0:
+    def _reshaped_sizes(inputs):
+        """
+        Compatibility shim for Sam2Processor API changes across transformers versions.
+
+        'reshaped_input_sizes' was renamed to 'input_sizes' in newer releases.
+        Falls back to 'original_sizes' if neither key is present.
+        """
+        for key in ("reshaped_input_sizes", "input_sizes"):
+            if key in inputs:
+                return inputs[key].cpu()
+        return inputs["original_sizes"].cpu()
+
+    @staticmethod
+    def _best_mask(masks_tensor) -> Optional[np.ndarray]:
+        """Unwrap the mask tensor returned by post_process_masks."""
+        if masks_tensor is None or masks_tensor.numel() == 0:
             return None
-        best_idx = int(scores_tensor.argmax())
-        # masks_tensor shape: [num_masks, 1, H, W] or [num_masks, H, W]
-        m = masks_tensor[best_idx]
-        if m.dim() == 3:
-            m = m[0]
+        # masks_tensor shape: [1, H, W] or [H, W]
+        m = masks_tensor[0] if masks_tensor.dim() == 3 else masks_tensor
         return m.numpy().astype(bool)
 
     @staticmethod

@@ -127,8 +127,6 @@ class TextureAnalyser(BaseCapability):
     """
     LBP + Gabor texture analyser for plant surface analysis.
 
-    No model download. Pure NumPy/OpenCV. <50ms per image.
-
     Parameters
     ----------
     lbp_radius : int

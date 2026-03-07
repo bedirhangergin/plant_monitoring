@@ -4,7 +4,6 @@ capabilities/analysis/coverage_estimator.py
 Canopy Coverage Estimator
 
 Tracks the fraction of the image occupied by plant material over time.
-Pure OpenCV, no model download, <10ms per image.
 
 Coverage is one of the most informative single numbers in plant monitoring:
   - Rising coverage = healthy vegetative growth

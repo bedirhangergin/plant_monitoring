@@ -6,8 +6,7 @@ Classical HSV Colour Segmentation
 Segments plant regions from images using HSV colour space masking.
 Free, zero model download, <10ms per image.
 
-Unlike the HSVDetector in sprout_detection (which only gives a yes/no
-answer), this segmentor returns a full pixel mask that can be used for:
+This segmentor returns a full pixel mask that can be used for:
   - Precise plant area measurement
   - Feeding into depth estimation (mask the plant region only)
   - Colour analysis on segmented plant vs background separately
@@ -172,8 +171,6 @@ class HSVSegmentationResult(CapabilityResult):
 class HSVSegmentor(BaseCapability):
     """
     Classical HSV colour segmentation for plant images.
-
-    No model download, no GPU, <10ms per image.
 
     Parameters
     ----------
